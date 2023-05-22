@@ -5,9 +5,9 @@ help_msg() {
     >&$1 echo 'compile and execute programs from the command line.'
     >&$1 echo
     >&$1 echo 'example usage:'
-    >&$1 echo '  main.c'
-    >&$1 echo '  main.c arg1 arg2'
-    >&$1 echo "  main.c -lncurses arg1 arg2"
+    >&$1 echo 'cex  main.c'
+    >&$1 echo 'cex  main.c arg1 arg2'
+    >&$1 echo "cex  main.c -lncurses arg1 arg2"
     >&$1 echo
 }
 
