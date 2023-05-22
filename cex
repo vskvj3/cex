@@ -53,7 +53,7 @@ if [ "$extension" == "c" ]; then  # c program
     elif [[ "$extension" =~ (cc|c\+\+|cpp|cxx) ]]; then
     compiler=$CXX
 else
-    echo -e "\e[1;31mUnsupported file format. Only .c and .cpp files are supported.\e[0m\n"
+    >&2 echo -e "\e[1;31mUnsupported file format. Only .c and .cpp files are supported.\e[0m\n"
     exit 1
 fi
 
