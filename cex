@@ -32,9 +32,11 @@ extension="${1##*.}"
 filename="$@"
 bin_name="${1%.*}"
 
+# check for environment variables
 [[ -z "$CC" ]]  && CC=cc
 [[ -z "$CXX" ]] && CXX=c++
 
+# check for compilers 
 if command -v $CC >/dev/null; then
     echo
 else
@@ -48,7 +50,8 @@ else
     CXX="cc -lstdc++"
 fi
 
-if [ "$extension" == "c" ]; then  # c program
+# check file extension
+if [ "$extension" == "c" ]; then  
     compiler=$CC
     elif [[ "$extension" =~ (cc|c\+\+|cpp|cxx) ]]; then
     compiler=$CXX
@@ -57,6 +60,8 @@ else
     exit 1
 fi
 
+
+# compile and execute program
 echo -e "\e[1;34m$compiler -o $bin_name.bin $filename\n"
 $compiler -o $bin_name.bin $filename
 if [ $? -eq 0 ]; then
