@@ -25,12 +25,13 @@ then
     exit 1; 
 fi
 
+# find filename and extension name
 filename=$(basename -- "$1")
 extension="${filename##*.}"
 filename="${filename%.*}"
 pathname="${1%.*}"
 
-
+# for c programs
 if [[ "$extension" == "c" ]]
 then
     rm warnings 
