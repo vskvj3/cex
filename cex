@@ -25,18 +25,6 @@ then
     exit 1; 
 fi
 
-# TEMP=`getopt --long analyse -- "$@"`
-# eval set -- "$TEMP"
-
-# while true ; do
-#     case "$1" in
-#         --analyse)
-#             echo "analysis complete"; shift;;
-#         -- ) shift; break; break ;;
-#         * ) break; break ;;
-#     esac
-# done
-
 filename=$(basename -- "$1")
 extension="${filename##*.}"
 filename="${filename%.*}"
