@@ -6,7 +6,7 @@ int main() {
     printf("Enter string: ");
     gets(name);
 
-    printf("hello, %s", name);
+    printf("hello, %s", name)
 
     return 0;
 }
