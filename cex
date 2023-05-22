@@ -34,8 +34,8 @@ pathname="${1%.*}"
 # for c programs
 if [[ "$extension" == "c" ]]
 then
-    rm warnings 
-    if gcc "$1" -o "$pathname" 2>>warnings; then
+    rm /tmp/cwarnings 
+    if gcc "$1" -o "$pathname" 2>>/tmp/cwarnings; then
         echo -e "\e[1;31mcompile time warnings\\\errors: \e[0m\n" 
         cat warnings
         echo -e "\e[1;31m \nExecution: \e[0m" 
