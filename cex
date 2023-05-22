@@ -28,16 +28,31 @@ fi
 
 # find filename and extension name
 filename=$(basename -- "$1")
-
 extension="${1##*.}"
 filename="$@"
 bin_name="${1%.*}"
 
+[[ -z "$CC" ]]  && CC=cc
+[[ -z "$CXX" ]] && CXX=c++
+
+if command -v $CC >/dev/null; then
+    echo 
+else
+    >&2 echo "error: \$CC ($CC) not found"
+fi
+
+if command -v $CXX >/dev/null; then
+    echo 
+else
+    >&2 echo -e "error: \$CXX ($CXX) not found \nSetting compiler to cc"
+    CXX="cc -lstdc++"
+fi
+
 
 
 if [ "$extension" == "c" ]; then  # c program
-    echo -e "\e[1;34mgcc -o $bin_name.bin $filename\n"
-    gcc -o $bin_name.bin $filename
+    echo -e "\e[1;34m$CC -o $bin_name.bin $filename\n"
+    $CC -o $bin_name.bin $filename
     if [ $? -eq 0 ]; then
         echo -e "\e[1;32m\nCompilation successful. Executing the program...\e[0m\n" 
 
@@ -46,23 +61,23 @@ if [ "$extension" == "c" ]; then  # c program
         end_time=$(date +%s%3N)
         execution_time=$((end_time - start_time))
 
-        echo -e "\nExecution time: $execution_time ms"  
+        echo -e "\n\nExecution time: $execution_time ms"  
     else
         echo -e "\e[1;31m[error] Compilation failed.\e[0m\n" 
     fi
 
-elif [ "$extension" == "cpp" ]; then # c++ program
-    echo "g++ -o $bin_name.bin $filename"
-    g++ -o $bin_name.bin $filename
+elif [[ "$extension" =~ (cc|c\+\+|cpp|cxx) ]]; then # c++ program
+    echo -e "\e[1;34m$CXX -o $bin_name.bin $filename"
+    $CXX -o $bin_name.bin $filename
     if [ $? -eq 0 ]; then
         echo -e "\e[1;32m\nCompilation successful. Executing the program...\e[0m\n" 
-        
+
         start_time=$(date +%s%3N)
         ./$bin_name.bin
         end_time=$(date +%s%3N)
         execution_time=$((end_time - start_time))
 
-        echo -e "\nExecution time: $execution_time ms"  
+        echo -e "\n\nExecution time: $execution_time ms"  
     else
         echo -e "\e[1;31m[error] Compilation failed.\e[0m\n"
     fi

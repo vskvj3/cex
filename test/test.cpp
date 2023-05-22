@@ -3,12 +3,9 @@
 using namespace std;
 
 int main() {
-    int num1, num2;
+    string name;
 
-    cout<<"Enter two numbers: ";
+    cin>>name;
 
-    cin>>num1>>num2;
-
-    cout<<"Sum: "<<num1+num2;
-    return 0;
+    cout<<"\n"<<name<<"\n";
 }
