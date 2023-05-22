@@ -1,12 +1,12 @@
 #include <stdio.h>
 
 int main() {
-    int num1, num2;
+    char name[10];
 
-    printf("Enter two numbers: ");
-    scanf(" %d %d", &num1, &num2);
+    printf("Enter string: ");
+    gets(name);
 
-    printf("sum: %d", num1+num2);
+    printf("hello, %s", name);
 
     return 0;
 }

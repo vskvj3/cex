@@ -27,19 +27,32 @@ fi
 
 # find filename and extension name
 filename=$(basename -- "$1")
-extension="${filename##*.}"
-filename="${filename%.*}"
-pathname="${1%.*}"
 
-# for c programs
-if [[ "$extension" == "c" ]]
-then
-    rm /tmp/c_warnings 
-    if gcc "$1" -o "$pathname" 2>>/tmp/c_warnings; then
-        echo -e "\e[1;31mcompile time warnings\\\errors: \e[0m\n" 
-        cat warnings
-        echo -e "\e[1;31m \nExecution: \e[0m" 
-        $analyze memusage -T ./$pathname && echo -e "\e[1;32mProgram terminated without errors\e[0m\n" 
+extension="${1##*.}"
+filename="$@"
+bin_name="${1%.*}"
+
+
+# Compile and execute the program based on the file extension
+if [ "$extension" == "c" ]; then
+    echo "gcc -o $bin_name.bin $filename"
+    gcc -o $bin_name.bin $filename
+    if [ $? -eq 0 ]; then
+        ./$bin_name.bin
+    else
+        echo -e "\e[1;31mCompilation failed.\e[0m\n" 
+        echo ""
     fi
+elif [ "$extension" == "cpp" ]; then
+    echo "g++ -o $bin_name.bin $filename"
+    g++ -o $bin_name.bin $filename
+    if [ $? -eq 0 ]; then
+        ./$bin_name.bin
+    else
+        echo -e "\e[1;31mCompilation failed.\e[0m\n" 
+        echo ""
+    fi
+else
+    echo -e "\e[1;31mUnsupported file format. Only .c and .cpp files are supported.\e[0m\n" 
+    exit 1
 fi
-
