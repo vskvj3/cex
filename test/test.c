@@ -2,11 +2,9 @@
 
 int main() {
     char name[10];
-
-    printf("Enter string: ");
     gets(name);
 
-    printf("hello, %s", name)
+    printf("from stdin: %s", name);
 
     return 0;
 }

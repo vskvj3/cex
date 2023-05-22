@@ -8,6 +8,7 @@ help_msg() {
     >&$1 echo "$0  main.c"
     >&$1 echo "$0  main.c arg1 arg2"
     >&$1 echo "$0  main.c -lncurses arg1 arg2"
+    >&$1 echo "$0  main.c < <input file>"
     >&$1 echo
 }
 
@@ -33,25 +34,39 @@ filename="$@"
 bin_name="${1%.*}"
 
 
-# Compile and execute the program based on the file extension
-if [ "$extension" == "c" ]; then
+
+if [ "$extension" == "c" ]; then  # c program
     echo -e "\e[1;34mgcc -o $bin_name.bin $filename\n"
     gcc -o $bin_name.bin $filename
     if [ $? -eq 0 ]; then
         echo -e "\e[1;32m\nCompilation successful. Executing the program...\e[0m\n" 
+
+        start_time=$(date +%s%3N)
         ./$bin_name.bin
+        end_time=$(date +%s%3N)
+        execution_time=$((end_time - start_time))
+
+        echo -e "\nExecution time: $execution_time ms"  
     else
         echo -e "\e[1;31m[error] Compilation failed.\e[0m\n" 
     fi
-elif [ "$extension" == "cpp" ]; then
+
+elif [ "$extension" == "cpp" ]; then # c++ program
     echo "g++ -o $bin_name.bin $filename"
     g++ -o $bin_name.bin $filename
     if [ $? -eq 0 ]; then
         echo -e "\e[1;32m\nCompilation successful. Executing the program...\e[0m\n" 
+        
+        start_time=$(date +%s%3N)
         ./$bin_name.bin
+        end_time=$(date +%s%3N)
+        execution_time=$((end_time - start_time))
+
+        echo -e "\nExecution time: $execution_time ms"  
     else
         echo -e "\e[1;31m[error] Compilation failed.\e[0m\n"
     fi
+
 else
     echo -e "\e[1;31mUnsupported file format. Only .c and .cpp files are supported.\e[0m\n" 
     exit 1
