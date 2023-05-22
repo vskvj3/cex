@@ -15,15 +15,15 @@ help_msg() {
 # --help -h, print help message exit(0)
 if [[ "$1" == "--help" || "$1" == "-h" ]]
 then
-    help_msg 1; 
+    help_msg 1;
     exit 0;
 fi
 
 # empty arguments, print help message exit(1)
-if [[ "$#" -lt 1 ]] 
-then 
-    help_msg 2; 
-    exit 1; 
+if [[ "$#" -lt 1 ]]
+then
+    help_msg 2;
+    exit 1;
 fi
 
 # find filename and extension name
@@ -36,53 +36,39 @@ bin_name="${1%.*}"
 [[ -z "$CXX" ]] && CXX=c++
 
 if command -v $CC >/dev/null; then
-    echo 
+    echo
 else
     >&2 echo "error: \$CC ($CC) not found"
 fi
 
 if command -v $CXX >/dev/null; then
-    echo 
+    echo
 else
     >&2 echo -e "error: \$CXX ($CXX) not found \nSetting compiler to cc"
     CXX="cc -lstdc++"
 fi
 
-
-
 if [ "$extension" == "c" ]; then  # c program
-    echo -e "\e[1;34m$CC -o $bin_name.bin $filename\n"
-    $CC -o $bin_name.bin $filename
-    if [ $? -eq 0 ]; then
-        echo -e "\e[1;32m\nCompilation successful. Executing the program...\e[0m\n" 
-
-        start_time=$(date +%s%3N)
-        ./$bin_name.bin
-        end_time=$(date +%s%3N)
-        execution_time=$((end_time - start_time))
-
-        echo -e "\n\nExecution time: $execution_time ms"  
-    else
-        echo -e "\e[1;31m[error] Compilation failed.\e[0m\n" 
-    fi
-
-elif [[ "$extension" =~ (cc|c\+\+|cpp|cxx) ]]; then # c++ program
-    echo -e "\e[1;34m$CXX -o $bin_name.bin $filename"
-    $CXX -o $bin_name.bin $filename
-    if [ $? -eq 0 ]; then
-        echo -e "\e[1;32m\nCompilation successful. Executing the program...\e[0m\n" 
-
-        start_time=$(date +%s%3N)
-        ./$bin_name.bin
-        end_time=$(date +%s%3N)
-        execution_time=$((end_time - start_time))
-
-        echo -e "\n\nExecution time: $execution_time ms"  
-    else
-        echo -e "\e[1;31m[error] Compilation failed.\e[0m\n"
-    fi
-
+    compiler=$CC
+    elif [[ "$extension" =~ (cc|c\+\+|cpp|cxx) ]]; then
+    compiler=$CXX
 else
-    echo -e "\e[1;31mUnsupported file format. Only .c and .cpp files are supported.\e[0m\n" 
+    echo -e "\e[1;31mUnsupported file format. Only .c and .cpp files are supported.\e[0m\n"
     exit 1
 fi
+
+echo -e "\e[1;34m$compiler -o $bin_name.bin $filename\n"
+$compiler -o $bin_name.bin $filename
+if [ $? -eq 0 ]; then
+    echo -e "\e[1;32m\nCompilation successful. Executing the program...\e[0m\n"
+    
+    start_time=$(date +%s%3N)
+    ./$bin_name.bin
+    end_time=$(date +%s%3N)
+    execution_time=$((end_time - start_time))
+    
+    echo -e "\n\nExecution time: $execution_time ms"
+else
+    echo -e "\e[1;31m[error] Compilation failed.\e[0m\n"
+fi
+
