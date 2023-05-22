@@ -1,0 +1,56 @@
+#!/usr/bin/env bash
+
+help_msg() {
+    >&$1 echo "Usage: $(basename "$0") <file.c ... | compiler_options ...> [program_arguments]"
+    >&$1 echo 'compile and execute programs from the command line.'
+    >&$1 echo
+    >&$1 echo 'example usage:'
+    >&$1 echo '  main.c'
+    >&$1 echo '  main.c arg1 arg2'
+    >&$1 echo "  main.c -lncurses arg1 arg2"
+    >&$1 echo
+}
+
+# --help -h, print help message exit(0)
+if [[ "$1" == "--help" || "$1" == "-h" ]]
+then
+    help_msg 1; 
+    exit 0;
+fi
+
+# empty arguments, print help message exit(1)
+if [[ "$#" -lt 1 ]] 
+then 
+    help_msg 2; 
+    exit 1; 
+fi
+
+# TEMP=`getopt --long analyse -- "$@"`
+# eval set -- "$TEMP"
+
+# while true ; do
+#     case "$1" in
+#         --analyse)
+#             echo "analysis complete"; shift;;
+#         -- ) shift; break; break ;;
+#         * ) break; break ;;
+#     esac
+# done
+
+filename=$(basename -- "$1")
+extension="${filename##*.}"
+filename="${filename%.*}"
+pathname="${1%.*}"
+
+
+if [[ "$extension" == "c" ]]
+then
+    rm warnings 
+    if gcc "$1" -o "$pathname" 2>>warnings; then
+        echo -e "\e[1;31mcompile time warnings\\\errors: \e[0m\n" 
+        cat warnings
+        echo -e "\e[1;31m \nExecution: \e[0m" 
+        $analyze memusage -T ./$pathname && echo -e "\e[1;32mProgram terminated without errors\e[0m\n" 
+    fi
+fi
+
