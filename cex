@@ -68,7 +68,7 @@ if [ $? -eq 0 ]; then
     echo -e "\e[1;32m\nCompilation successful. Executing the program...\e[0m\n"
     
     start_time=$(date +%s%3N)
-    ./$bin_name.bin
+    command time -f "time: %E\nmax RSS: %M" ./$bin_name.bin
     end_time=$(date +%s%3N)
     execution_time=$((end_time - start_time))
     
