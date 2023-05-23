@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 
 help_msg() {
-    >&$1 echo "Usage: $0 <file.c ... | compiler_options ...> [program_arguments]"
+    >&$1 echo "Usage: (basename -- "$0") <file.c ... | compiler_options ...> [program_arguments]"
     >&$1 echo 'compile and execute programs from the command line.'
     >&$1 echo
     >&$1 echo 'example usage:'
-    >&$1 echo "$0  main.c"
-    >&$1 echo "$0  main.c arg1 arg2"
-    >&$1 echo "$0  main.c -lncurses arg1 arg2"
-    >&$1 echo "$0  main.c < <input file>"
+    >&$1 echo "(basename -- "$0")  main.c"
+    >&$1 echo "(basename -- "$0")  main.c arg1 arg2"
+    >&$1 echo "(basename -- "$0")  main.c -lncurses arg1 arg2"
+    >&$1 echo "(basename -- "$0")  main.c < <input file>"
     >&$1 echo
 }
 
