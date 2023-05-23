@@ -67,12 +67,17 @@ $compiler -o $bin_name.bin $filename
 if [ $? -eq 0 ]; then
     echo -e "\e[1;32m\nCompilation successful. Executing the program...\e[0m\n"
     
-    start_time=$(date +%s%3N)
-    command time -f "time: %E\nmax RSS: %M" ./$bin_name.bin
-    end_time=$(date +%s%3N)
-    execution_time=$((end_time - start_time))
-    
-    echo -e "\n\nExecution time: $execution_time ms"
+    if command -v time &>/dev/null; then
+        command time -f "\nExecution time: %Es\nMaximum memory usage (RSS): %M kb" ./$bin_name.bin
+    else
+        start_time=$(date +%s%3N)
+        ./$bin_name.bin
+        end_time=$(date +%s%3N)
+        execution_time=$((end_time - start_time))
+            
+        echo -e "\n\nExecution time: $execution_time ms"
+    fi
+
 else
     echo -e "\e[1;31m[error] Compilation failed.\e[0m\n"
 fi
